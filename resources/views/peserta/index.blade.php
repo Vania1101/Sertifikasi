@@ -1,126 +1,286 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Data Peserta</title>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body style="background-color: #f3f4f6;">
-
-<div style="max-width: 1200px; margin: 40px auto;">
-
-    <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">
-        Data Peserta
-    </h1>
-
-    @if(session('success'))
-        <div style="
-            background-color: #dcfce7;
-            color: #166534;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 6px;
-        ">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <a href="{{ route('peserta.create') }}"
-       style="
-           display: inline-block;
-           background-color: #2563eb;
-           color: white;
-           padding: 10px 15px;
-           border-radius: 6px;
-           text-decoration: none;
-           margin-bottom: 20px;
-       ">
-        + Tambah Peserta
-    </a>
+<x-app-layout>
 
     <div style="
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        overflow-x: auto;
+        background-color: #f3f4f6;
+        min-height: 100vh;
+        padding: 40px;
     ">
 
-        <table style="width: 100%; border-collapse: collapse;">
+        <div style="
+            max-width: 1100px;
+            margin: auto;
+        ">
 
-            <thead>
-                <tr style="background-color: #f3f4f6;">
+            <!-- HEADER -->
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+            ">
 
-                    <th style="padding: 12px;">No</th>
-                    <th style="padding: 12px;">Nama</th>
-                    <th style="padding: 12px;">NISN</th>
-                    <th style="padding: 12px;">Jenis Kelamin</th>
-                    <th style="padding: 12px;">Email</th>
-                    <th style="padding: 12px;">Skema</th>
-                    <th style="padding: 12px;">Aksi</th>
+                <div>
+                    <h1 style="
+                        font-size: 28px;
+                        font-weight: bold;
+                        margin: 0;
+                        color: #111827;
+                    ">
+                        Data Peserta
+                    </h1>
 
-                </tr>
-            </thead>
+                    <p style="
+                        margin-top: 5px;
+                        color: #6b7280;
+                    ">
+                        Daftar peserta sertifikasi
+                    </p>
+                </div>
 
-            <tbody>
+                <div style="
+                    display: flex;
+                    gap: 10px;
+                ">
 
-                @forelse($pesertas as $peserta)
+                    <a href="{{ route('dashboard') }}"
+                       style="
+                           background-color: #6b7280;
+                           color: white;
+                           padding: 10px 16px;
+                           border-radius: 6px;
+                           text-decoration: none;
+                       ">
+                        Dashboard
+                    </a>
 
-                    <tr>
+                    <a href="{{ route('peserta.create') }}"
+                       style="
+                           background-color: #2563eb;
+                           color: white;
+                           padding: 10px 16px;
+                           border-radius: 6px;
+                           text-decoration: none;
+                       ">
+                        + Tambah Peserta
+                    </a>
 
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
-                            {{ $loop->iteration }}
-                        </td>
+                </div>
 
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
-                            {{ $peserta->nama }}
-                        </td>
+            </div>
 
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+
+            <!-- PENCARIAN -->
+            <form action="{{ route('peserta.index') }}" method="GET"
+                  style="
+                      display: flex;
+                      gap: 10px;
+                      margin-bottom: 20px;
+                  ">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ $search ?? '' }}"
+                    placeholder="Cari nama, NISN, atau email..."
+                    style="
+                        flex: 1;
+                        padding: 10px 12px;
+                        border: 1px solid #d1d5db;
+                        border-radius: 6px;
+                        background-color: white;
+                    "
+                >
+
+                <button type="submit"
+                        style="
+                            background-color: #2563eb;
+                            color: white;
+                            padding: 10px 18px;
+                            border: none;
+                            border-radius: 6px;
+                            cursor: pointer;
+                        ">
+                    Cari
+                </button>
+
+                @if(!empty($search))
+
+                    <a href="{{ route('peserta.index') }}"
+                       style="
+                           background-color: #6b7280;
+                           color: white;
+                           padding: 10px 18px;
+                           border-radius: 6px;
+                           text-decoration: none;
+                       ">
+                        Reset
+                    </a>
+
+                @endif
+
+            </form>
+
+
+            <!-- SUCCESS MESSAGE -->
+            @if(session('success'))
+
+                <div id="success-alert"
+                     style="
+                         background-color: #d1fae5;
+                         color: #065f46;
+                         padding: 12px 16px;
+                         border-radius: 6px;
+                         margin-bottom: 20px;
+                         border: 1px solid #a7f3d0;
+                     ">
+
+                    {{ session('success') }}
+
+                </div>
+
+            @endif
+
+
+            <!-- DATA PESERTA -->
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            ">
+
+                @forelse ($pesertas as $peserta)
+
+                    <div style="
+                        background-color: white;
+                        border-radius: 10px;
+                        padding: 20px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    ">
+
+                        <!-- NAMA -->
+                        <div style="margin-bottom: 15px;">
+
+                            <div style="
+                                font-size: 13px;
+                                color: #6b7280;
+                                margin-bottom: 4px;
+                            ">
+                                Nama Peserta
+                            </div>
+
+                            <div style="
+                                font-size: 20px;
+                                font-weight: bold;
+                                color: #111827;
+                            ">
+                                {{ $peserta->nama }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- NISN -->
+                        <div style="margin-bottom: 12px;">
+                            <strong>NISN:</strong>
                             {{ $peserta->nisn }}
-                        </td>
+                        </div>
 
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+
+                        <!-- JENIS KELAMIN -->
+                        <div style="margin-bottom: 12px;">
+                            <strong>Jenis Kelamin:</strong>
                             {{ $peserta->jenis_kelamin }}
-                        </td>
+                        </div>
 
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+
+                        <!-- EMAIL -->
+                        <div style="margin-bottom: 12px;">
+                            <strong>Email:</strong>
                             {{ $peserta->email }}
-                        </td>
+                        </div>
 
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+
+                        <!-- NO HP -->
+                        <div style="margin-bottom: 12px;">
+                            <strong>No. HP:</strong>
+                            {{ $peserta->no_hp }}
+                        </div>
+
+
+                        <!-- TANGGAL LAHIR -->
+                        <div style="margin-bottom: 12px;">
+                            <strong>Tanggal Lahir:</strong>
+                            {{ $peserta->tanggal_lahir }}
+                        </div>
+
+
+                        <!-- ALAMAT -->
+                        <div style="margin-bottom: 12px;">
+                            <strong>Alamat:</strong>
+                            {{ $peserta->alamat }}
+                        </div>
+
+
+                        <!-- SKEMA -->
+                        <div style="margin-bottom: 18px;">
+
+                            <strong>Skema Sertifikasi:</strong>
+
+                            {{ $peserta->skema->kode_skema ?? '-' }}
+
+                            -
+
                             {{ $peserta->skema->nama_skema ?? '-' }}
-                        </td>
 
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                        </div>
 
+
+                        <!-- TOMBOL -->
+                        <div style="
+                            display: flex;
+                            gap: 8px;
+                            align-items: center;
+                        ">
+
+                            <!-- DETAIL -->
                             <a href="{{ route('peserta.show', $peserta->id) }}"
-                               style="color: #2563eb; margin-right: 8px;">
+                               style="
+                                   color: #384e79;
+                                   padding: 8px 14px;
+                                   border-radius: 5px;
+                                   text-decoration: none;
+                               ">
                                 Detail
                             </a>
 
+
+                            <!-- EDIT -->
                             <a href="{{ route('peserta.edit', $peserta->id) }}"
-                               style="color: #d97706; margin-right: 8px;">
+                               style="
+                                   color: #f59e0b;
+                                   padding: 8px 14px;
+                                   border-radius: 5px;
+                                   text-decoration: none;
+                               ">
                                 Edit
                             </a>
 
+
+                            <!-- HAPUS -->
                             <form action="{{ route('peserta.destroy', $peserta->id) }}"
                                   method="POST"
-                                  style="display: inline;"
-                                  onsubmit="return confirm('Yakin ingin menghapus peserta ini?')">
+                                  style="margin: 0;">
 
                                 @csrf
                                 @method('DELETE')
 
                                 <button type="submit"
+                                        onclick="return confirm('Yakin ingin menghapus peserta ini?')"
                                         style="
-                                            color: #dc2626;
+                                            color: red;
+                                            padding: 8px 14px;
                                             border: none;
-                                            background: none;
+                                            border-radius: 5px;
                                             cursor: pointer;
                                         ">
                                     Hapus
@@ -128,28 +288,61 @@
 
                             </form>
 
-                        </td>
+                        </div>
 
-                    </tr>
+                    </div>
 
                 @empty
 
-                    <tr>
-                        <td colspan="7"
-                            style="padding: 20px; text-align: center;">
+                    <div style="
+                        grid-column: span 2;
+                        background-color: white;
+                        padding: 40px;
+                        text-align: center;
+                        border-radius: 10px;
+                        color: #6b7280;
+                    ">
+
+                        @if(!empty($search))
+                            Data peserta dengan kata kunci
+                            "<strong>{{ $search }}</strong>"
+                            tidak ditemukan.
+                        @else
                             Belum ada data peserta.
-                        </td>
-                    </tr>
+                        @endif
+
+                    </div>
 
                 @endforelse
 
-            </tbody>
+            </div>
 
-        </table>
+        </div>
 
     </div>
 
-</div>
 
-</body>
-</html>
+    <!-- PESAN BERHASIL HILANG OTOMATIS -->
+    <script>
+
+        setTimeout(function () {
+
+            const alert = document.getElementById('success-alert');
+
+            if (alert) {
+
+                alert.style.transition = 'opacity 0.5s';
+
+                alert.style.opacity = '0';
+
+                setTimeout(function () {
+                    alert.remove();
+                }, 500);
+
+            }
+
+        }, 3000);
+
+    </script>
+
+</x-app-layout>

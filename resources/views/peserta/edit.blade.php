@@ -38,17 +38,16 @@
 
     @endif
 
-    <form action="{{ route('peserta.update', $peserta->id) }}"
-          method="POST"
-          style="
-              background-color: white;
-              padding: 25px;
-              border-radius: 8px;
-          ">
+    <form action="{{ url('/peserta/' . $peserta->id) }}"
+      method="POST"
+      style="
+          background-color: white;
+          padding: 25px;
+          border-radius: 8px;
+      ">
 
-        @csrf
-        @method('PUT')
-
+    @csrf
+    @method('PUT')
         <div style="margin-bottom: 15px;">
 
             <label>Nama Peserta</label>

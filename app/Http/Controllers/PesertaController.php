@@ -9,110 +9,134 @@ use Illuminate\Validation\Rule;
 
 class PesertaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $pesertas = Peserta::with('skema')->latest()->get();
+        $search = $request->search;
 
-        return view('peserta.index', compact('pesertas'));
+        $pesertas = Peserta::with('skema')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', '%' . $search . '%')
+                      ->orWhere('nisn', 'like', '%' . $search . '%')
+                      ->orWhere('email', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->get();
+
+        return view('peserta.index', compact('pesertas', 'search'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $skemas = SkemaSertifikasi::latest()->get();
+        $skemas = SkemaSertifikasi::all();
+
         return view('peserta.create', compact('skemas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'nama' => 'required|string|max:255',
-        'nisn' => 'required|string|max:20|unique:pesertas,nisn',
-        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-        'email' => 'required|email|max:255|unique:pesertas,email',
-        'no_hp' => 'required|string|max:20',
-        'tanggal_lahir' => 'required|date',
-        'alamat' => 'required|string',
-        'skema_sertifikasi_id' => 'required|exists:skema_sertifikasis,id',
-    ]);
-
-    Peserta::create($validated);
-
-    return redirect()
-        ->route('peserta.index')
-        ->with('success', 'Peserta berhasil disimpan.');
-}
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
     {
-        $peserta = Peserta::with('skema')->findOrFail($id);
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'nisn' => 'required|string|max:20',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'email' => 'required|email|max:255|unique:pesertas,email',
+            'no_hp' => 'required|string|max:20',
+            'tanggal_lahir' => 'required|date',
+            'alamat' => 'required|string',
+            'skema_sertifikasi_id' => 'required|exists:skema_sertifikasis,id',
+        ], [
+            'nama.required' => 'Nama peserta wajib diisi.',
+            'nama.string' => 'Nama peserta harus berupa teks.',
+            'nama.max' => 'Nama peserta maksimal 255 karakter.',
+            'nisn.required' => 'NISN wajib diisi.',
+            'nisn.max' => 'NISN maksimal 20 karakter.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'jenis_kelamin.in' => 'Jenis kelamin harus Laki-laki atau Perempuan.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 255 karakter.',
+            'email.unique' => 'Email tersebut sudah terdaftar.',
+            'no_hp.required' => 'Nomor HP wajib diisi.',
+            'no_hp.max' => 'Nomor HP maksimal 20 karakter.',
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'tanggal_lahir.date' => 'Format tanggal lahir tidak valid.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'skema_sertifikasi_id.required' => 'Skema sertifikasi wajib dipilih.',
+            'skema_sertifikasi_id.exists' => 'Skema sertifikasi tidak ditemukan.',
+        ]);
+
+        Peserta::create($validated);
+
+        return redirect()
+            ->route('peserta.index')
+            ->with('success', 'Data peserta berhasil ditambahkan.');
+    }
+
+    public function show(Peserta $peserta)
+    {
+        $peserta->load('skema');
+
         return view('peserta.show', compact('peserta'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Peserta $peserta)
     {
-        $peserta = Peserta::findOrFail($id);
-        $skemas = SkemaSertifikasi::latest()->get();
-        return view('peserta.edit', compact('peserta','skemas'));
+        $skemas = SkemaSertifikasi::all();
+
+        return view('peserta.edit', compact('peserta', 'skemas'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Peserta $peserta)
     {
-        $pesertas = Peserta::findOrFail($id);
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'nisn' => [
-                'required',
-                'string',
-                'max:20',
-                Rule::unique('pesertas','nisn')->ignore($pesertas->id),
-            ],
+            'nisn' => 'required|string|max:20',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'email' => [
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('pesertas','email')->ignore($pesertas->id),
+                Rule::unique('pesertas', 'email')->ignore($peserta->id),
             ],
             'no_hp' => 'required|string|max:20',
             'tanggal_lahir' => 'required|date',
             'alamat' => 'required|string',
             'skema_sertifikasi_id' => 'required|exists:skema_sertifikasis,id',
+        ], [
+            'nama.required' => 'Nama peserta wajib diisi.',
+            'nama.string' => 'Nama peserta harus berupa teks.',
+            'nama.max' => 'Nama peserta maksimal 255 karakter.',
+            'nisn.required' => 'NISN wajib diisi.',
+            'nisn.max' => 'NISN maksimal 20 karakter.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'jenis_kelamin.in' => 'Jenis kelamin harus Laki-laki atau Perempuan.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 255 karakter.',
+            'email.unique' => 'Email tersebut sudah digunakan oleh peserta lain.',
+            'no_hp.required' => 'Nomor HP wajib diisi.',
+            'no_hp.max' => 'Nomor HP maksimal 20 karakter.',
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'tanggal_lahir.date' => 'Format tanggal lahir tidak valid.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'skema_sertifikasi_id.required' => 'Skema sertifikasi wajib dipilih.',
+            'skema_sertifikasi_id.exists' => 'Skema sertifikasi tidak ditemukan.',
         ]);
 
-        $pesertas->update($validated);
+        $peserta->update($validated);
+
         return redirect()
             ->route('peserta.index')
-            ->with('success','Data peserta berhasil diupdate.');
+            ->with('success', 'Data peserta berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Peserta $peserta)
     {
-        $pesertas = Peserta::findOrFail($id);
-        $pesertas->delete();
+        $peserta->delete();
+
         return redirect()
             ->route('peserta.index')
-            ->with('success','Peserta berhasil dihapus,');
+            ->with('success', 'Data peserta berhasil dihapus.');
     }
 }

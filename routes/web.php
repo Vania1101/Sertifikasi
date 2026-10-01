@@ -14,16 +14,17 @@ Route::middleware(['auth'])->group(function () {
         $totalPeserta = \App\Models\Peserta::count();
         $totalSkema = \App\Models\SkemaSertifikasi::count();
 
-        return view('dashboard', compact('totalPeserta','totalSkema'));
+        return view('dashboard', compact('totalPeserta', 'totalSkema'));
     })->name('dashboard');
 
-    Route::resource('peserta', PesertaController::class);
+    Route::resource('peserta', PesertaController::class)
+        ->parameters(['peserta' => 'peserta']);
 
     Route::resource('skema', SkemaSertifikasiController::class);
 });
 
 require __DIR__.'/auth.php';
 
-Route::get('/profile', function(){
+Route::get('/profile', function () {
     return redirect()->route('dashboard');
 })->name('profile.edit');

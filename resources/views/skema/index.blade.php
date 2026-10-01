@@ -1,121 +1,179 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Skema Sertifikasi</title>
+<x-app-layout>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+    <div style="background-color: #f3f4f6; min-height: 100vh; padding: 40px;">
 
-<body class="bg-gray-100">
+        <div style="max-width: 1400px; margin: auto;">
 
-    <div class="max-w-6xl mx-auto py-10 px-6">
+            <!-- HEADER -->
+            <div style="display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 20px;">
 
-        <div class="bg-white rounded-lg shadow p-6">
-
-            <div class="flex justify-between items-center mb-6">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">
+
+                    <h1 style="font-size: 28px;
+                               font-weight: bold;
+                               margin: 0 0 5px 0;
+                               color: #111827;">
                         Data Skema Sertifikasi
                     </h1>
 
-                    <p class="text-gray-500 mt-1">
+                    <p style="margin: 0 0 10px 0;
+                              color: #6b7280;
+                              font-size: 14px;">
                         Kelola data skema sertifikasi.
                     </p>
+
+
+                    <a href="{{ route('dashboard') }}"
+                       style="display: inline-block;
+                              background-color: #6b7280;
+                              color: white;
+                              padding: 8px 14px;
+                              border-radius: 6px;
+                              text-decoration: none;
+                              font-size: 14px;">
+                        ← Kembali ke Dashboard
+                    </a>
+
                 </div>
+
 
                 <a href="{{ route('skema.create') }}"
-   style="background-color: #2563eb; color: white; padding: 10px 16px; border-radius: 6px; text-decoration: none;">
-    + Tambah Skema
-</a>
+                   style="background-color: #2563eb;
+                          color: white;
+                          padding: 10px 16px;
+                          border-radius: 6px;
+                          text-decoration: none;
+                          font-size: 14px;">
+                    + Tambah Skema
+                </a>
+
             </div>
 
+
+            <!-- PESAN SUKSES -->
             @if (session('success'))
-                <div class="bg-green-100 text-green-700 px-4 py-3 rounded-lg mb-5">
+
+                <div style="background-color: #dcfce7;
+                            color: #166534;
+                            padding: 12px 15px;
+                            border-radius: 6px;
+                            margin-bottom: 15px;">
+
                     {{ session('success') }}
+
                 </div>
+
             @endif
 
-            <div class="overflow-x-auto">
 
-                <table class="w-full border-collapse">
+            <!-- TABEL -->
+            <div style="background-color: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+
+                <table style="width: 100%; border-collapse: collapse;">
 
                     <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border px-4 py-3 text-left">
+
+                        <tr style="background-color: #f3f4f6;">
+
+                            <th style="padding: 12px; text-align: left;">
                                 No
                             </th>
 
-                            <th class="border px-4 py-3 text-left">
+                            <th style="padding: 12px; text-align: left;">
                                 Kode Skema
                             </th>
 
-                            <th class="border px-4 py-3 text-left">
+                            <th style="padding: 12px; text-align: left;">
                                 Nama Skema
                             </th>
 
-                            <th class="border px-4 py-3 text-left">
+                            <th style="padding: 12px; text-align: left;">
                                 Deskripsi
                             </th>
 
-                            <th class="border px-4 py-3 text-center">
+                            <th style="padding: 12px; text-align: center;">
                                 Aksi
                             </th>
+
                         </tr>
+
                     </thead>
+
 
                     <tbody>
 
                         @forelse ($skemas as $skema)
 
-                            <tr class="hover:bg-gray-50">
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
 
-                                <td class="border px-4 py-3">
+                                <td style="padding: 12px;">
                                     {{ $loop->iteration }}
                                 </td>
 
-                                <td class="border px-4 py-3">
+                                <td style="padding: 12px;">
                                     {{ $skema->kode_skema }}
                                 </td>
 
-                                <td class="border px-4 py-3">
+                                <td style="padding: 12px;">
                                     {{ $skema->nama_skema }}
                                 </td>
 
-                                <td class="border px-4 py-3">
+                                <td style="padding: 12px;">
                                     {{ $skema->deskripsi ?? '-' }}
                                 </td>
 
-                                <td class="border px-4 py-3">
+                                <td style="padding: 12px; text-align: center;">
 
-                                    <div class="flex justify-center gap-2">
+                                    <a href="{{ route('skema.show', $skema->id) }}"
+                                       style="background-color: #6b7280;
+                                              color: white;
+                                              padding: 7px 12px;
+                                              border-radius: 5px;
+                                              text-decoration: none;
+                                              font-size: 13px;
+                                              margin-right: 5px;">
+                                        Detail
+                                    </a>
 
-                                        <a href="{{ route('skema.show', $skema->id) }}"
-                                           class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">
-                                            Detail
-                                        </a>
 
-                                        <a href="{{ route('skema.edit', $skema->id) }}"
-   style="background-color: #f59e0b; color: white; padding: 6px 12px; border-radius: 5px; text-decoration: none;">
-    Edit
-</a>
+                                    <a href="{{ route('skema.edit', $skema->id) }}"
+                                       style="background-color: #f59e0b;
+                                              color: white;
+                                              padding: 7px 12px;
+                                              border-radius: 5px;
+                                              text-decoration: none;
+                                              font-size: 13px;
+                                              margin-right: 5px;">
+                                        Edit
+                                    </a>
 
-                                        <form action="{{ route('skema.destroy', $skema->id) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Yakin ingin menghapus skema ini?');">
 
-                                            @csrf
-                                            @method('DELETE')
+                                    <form action="{{ route('skema.destroy', $skema->id) }}"
+                                          method="POST"
+                                          style="display: inline;">
 
-                                            <button type="submit"
-                                                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-                                                Hapus
-                                            </button>
+                                        @csrf
+                                        @method('DELETE')
 
-                                        </form>
+                                        <button type="submit"
+                                                onclick="return confirm('Yakin ingin menghapus skema ini?')"
+                                                style="background-color: #dc2626;
+                                                       color: white;
+                                                       padding: 7px 12px;
+                                                       border-radius: 5px;
+                                                       border: none;
+                                                       cursor: pointer;
+                                                       font-size: 13px;">
+                                            Hapus
+                                        </button>
 
-                                    </div>
+                                    </form>
 
                                 </td>
 
@@ -124,10 +182,16 @@
                         @empty
 
                             <tr>
+
                                 <td colspan="5"
-                                    class="border px-4 py-6 text-center text-gray-500">
+                                    style="padding: 25px;
+                                           text-align: center;
+                                           color: #6b7280;">
+
                                     Belum ada data skema sertifikasi.
+
                                 </td>
+
                             </tr>
 
                         @endforelse
@@ -142,5 +206,4 @@
 
     </div>
 
-</body>
-</html>
+</x-app-layout>
