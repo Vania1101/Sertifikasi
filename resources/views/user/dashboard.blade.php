@@ -1,6 +1,4 @@
-
 <x-app-layout>
-
     <style>
         .dashboard-wrapper {
             min-height: calc(100vh - 64px);
@@ -8,11 +6,10 @@
             display: flex;
         }
 
-        /* SIDEBAR */
         .sidebar {
             width: 245px;
             flex-shrink: 0;
-            background: #ffffff;
+            background: #fff;
             border-right: 1px solid #e5e7eb;
             padding: 20px 14px;
         }
@@ -42,19 +39,15 @@
             color: #4b5563;
             text-decoration: none;
             font-size: 14px;
-            width: 100%;
-            box-sizing: border-box;
-            transition: 0.2s;
         }
 
-        .menu-item:hover {
-            background: #f3f4f6;
+        .menu-item:hover,
+        .menu-item.active {
+            background: #eff6ff;
             color: #2563eb;
         }
 
         .menu-item.active {
-            background: #eff6ff;
-            color: #2563eb;
             font-weight: 600;
         }
 
@@ -63,26 +56,16 @@
             text-align: center;
         }
 
-        .logout-button {
-            background: #ffffff;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-        }
-
-        /* MAIN */
         .dashboard-main {
             flex: 1;
             min-width: 0;
             padding: 25px 30px;
         }
 
-        /* TOPBAR */
         .topbar {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 15px;
             margin-bottom: 25px;
         }
 
@@ -99,7 +82,6 @@
             font-weight: 600;
         }
 
-        /* TITLE */
         .page-title {
             font-size: 25px;
             font-weight: 700;
@@ -107,7 +89,6 @@
             margin-bottom: 20px;
         }
 
-        /* WELCOME */
         .welcome-card {
             background: white;
             border: 1px solid #e5e7eb;
@@ -120,6 +101,7 @@
             margin: 0 0 7px;
             font-size: 19px;
             color: #111827;
+            font-weight: 600;
         }
 
         .welcome-card p {
@@ -128,95 +110,113 @@
             font-size: 14px;
         }
 
-        /* PROFILE */
-        .profile-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .profile-card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 22px;
-        }
-
-        .profile-label {
-            color: #6b7280;
-            font-size: 13px;
-            margin-bottom: 9px;
-        }
-
-        .profile-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #111827;
-            overflow-wrap: anywhere;
-        }
-
-        /* BUTTON */
-        .btn-primary {
-            display: inline-block;
-            background: #2563eb;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 7px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .btn-primary:hover {
-            background: #1d4ed8;
-        }
-
-        .navigation-title {
+        .section-title {
             font-size: 18px;
             font-weight: 700;
             color: #111827;
             margin-bottom: 15px;
         }
 
-        .navigation-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-        }
-
-        .navigation-card {
+        .profile-card {
             background: white;
             border: 1px solid #e5e7eb;
             border-radius: 10px;
-            padding: 22px;
-            text-decoration: none;
-            transition: 0.2s;
+            overflow: hidden;
         }
 
-        .navigation-card:hover {
-            border-color: #93c5fd;
-            transform: translateY(-2px);
+        .profile-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
         }
 
-        .navigation-card h3 {
-            margin: 0 0 7px;
+        .profile-header h3 {
+            margin: 0;
             font-size: 16px;
+            font-weight: 700;
             color: #111827;
         }
 
-        .navigation-card p {
-            margin: 0;
-            color: #6b7280;
+        .profile-header p {
+            margin: 5px 0 0;
             font-size: 13px;
+            color: #6b7280;
         }
 
-        .navigation-link {
-            margin-top: 15px;
-            color: #2563eb;
+        .edit-button {
+            display: inline-block;
+            padding: 9px 15px;
+            background: #2563eb;
+            color: white;
+            border-radius: 7px;
+            text-decoration: none;
             font-size: 13px;
             font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .edit-button:hover {
+            background: #1d4ed8;
+        }
+
+        .profile-body {
+            padding: 8px 24px 20px;
+        }
+
+        .profile-row {
+            display: grid;
+            grid-template-columns: 180px minmax(0, 1fr);
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+
+        .profile-row:last-child {
+            border-bottom: none;
+        }
+
+        .profile-label {
+            color: #6b7280;
+        }
+
+        .profile-value {
+            color: #111827;
+            font-weight: 500;
+            overflow-wrap: anywhere;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .logout-area {
+            margin-top: 25px;
+        }
+
+        .logout-button {
+            display: inline-block;
+            padding: 10px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 7px;
+            background: white;
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background: #f3f4f6;
         }
 
         @media (max-width: 700px) {
@@ -230,22 +230,34 @@
                 border-bottom: 1px solid #e5e7eb;
             }
 
-            .dashboard-main {
-                padding: 20px 16px;
+            .sidebar-logo {
+                padding-bottom: 12px;
             }
 
-            .profile-grid,
-            .navigation-grid {
+            .menu-title {
+                margin-top: 12px;
+            }
+
+            .dashboard-main {
+                padding: 20px 15px;
+            }
+
+            .profile-row {
                 grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .profile-header {
+                align-items: flex-start;
+                flex-wrap: wrap;
             }
         }
     </style>
 
     <div class="dashboard-wrapper">
 
-        <!-- SIDEBAR -->
+        {{-- SIDEBAR --}}
         <aside class="sidebar">
-
             <div class="sidebar-logo">
                 Sertifikasi Kompetensi
             </div>
@@ -258,101 +270,129 @@
                 Dashboard
             </a>
 
-            <div class="menu-title">Akun</div>
+            <div class="menu-title">Data Saya</div>
 
-            <a href="{{ route('user.profile') }}"
+            <a href="{{ route('user.profile.edit') }}"
                class="menu-item">
                 <span class="menu-icon">👤</span>
-                Detail Profil
+                Data Diri
             </a>
-
-            <div class="menu-title">Keluar</div>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <button type="submit"
-                        class="menu-item logout-button">
-                    <span class="menu-icon">↪</span>
-                    Logout
-                </button>
-            </form>
-
         </aside>
 
-        <!-- MAIN -->
+        {{-- KONTEN --}}
         <main class="dashboard-main">
 
-            <!-- TOPBAR -->
             <div class="topbar">
                 <div class="user-circle">
                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
             </div>
 
-            <!-- TITLE -->
-            <div class="page-title">
-                Dashboard User
-            </div>
+            <div class="page-title">Dashboard</div>
 
-            <!-- WELCOME -->
+            @if (session('success'))
+                <div class="success-message">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="welcome-card">
                 <h2>
-                    Selamat Datang, {{ Auth::user()->name }}!
+                    Selamat Datang, {{ Auth::user()->name }}
                 </h2>
-
                 <p>
-                    Selamat datang di Sistem Informasi Sertifikasi
-                    Kompetensi.
+                    Berikut adalah informasi data diri kamu
+                    dalam Sistem Informasi Sertifikasi.
                 </p>
             </div>
 
-            <!-- PROFILE -->
-            <div class="profile-grid">
+            <div class="section-title">Data Diri Saya</div>
 
-                <div class="profile-card">
-                    <div class="profile-label">Nama Lengkap</div>
-
-                    <div class="profile-value">
-                        {{ Auth::user()->name }}
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div>
+                        <h3>Informasi Peserta</h3>
+                        <p>Periksa data diri kamu di bawah ini.</p>
                     </div>
+
+                    <a href="{{ route('user.profile.edit') }}"
+                       class="edit-button">
+                        ✎ Edit Data Diri
+                    </a>
                 </div>
 
-                <div class="profile-card">
-                    <div class="profile-label">Email</div>
+                <div class="profile-body">
 
-                    <div class="profile-value">
-                        {{ Auth::user()->email }}
+                    <div class="profile-row">
+                        <div class="profile-label">Nama Lengkap</div>
+                        <div class="profile-value">
+                            {{ $peserta->nama }}
+                        </div>
                     </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">NISN</div>
+                        <div class="profile-value">
+                            {{ $peserta->nisn }}
+                        </div>
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">Jenis Kelamin</div>
+                        <div class="profile-value">
+                            {{ $peserta->jenis_kelamin }}
+                        </div>
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">Email</div>
+                        <div class="profile-value">
+                            {{ $peserta->email }}
+                        </div>
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">Nomor HP</div>
+                        <div class="profile-value">
+                            {{ $peserta->no_hp }}
+                        </div>
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">Tanggal Lahir</div>
+                        <div class="profile-value">
+                            {{ $peserta->tanggal_lahir
+                                ? \Illuminate\Support\Carbon::parse($peserta->tanggal_lahir)->format('d-m-Y')
+                                : '-' }}
+                        </div>
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">Alamat</div>
+                        <div class="profile-value">
+                            {{ $peserta->alamat }}
+                        </div>
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">Skema Sertifikasi</div>
+                        <div class="profile-value">
+                            {{ $peserta->skema->nama_skema ?? 'Belum ada skema' }}
+                        </div>
+                    </div>
+
                 </div>
-
             </div>
 
-            <!-- NAVIGASI -->
-            <div class="navigation-title">
-                Pengaturan Akun
+            <div class="logout-area">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="logout-button">
+                        ↪ Logout
+                    </button>
+                </form>
             </div>
-
-            <div class="navigation-grid">
-
-                <a href="{{ route('user.profile') }}"
-                   class="navigation-card">
-
-                    <h3>Detail Profil</h3>
-
-                    <p>
-                        Lihat informasi nama dan email
-                        akun yang kamu gunakan.
-                    </p>
-
-                    <div class="navigation-link">
-                        Lihat Profil →
-                    </div>
-
-                </a>
 
         </main>
-
     </div>
-
 </x-app-layout>
