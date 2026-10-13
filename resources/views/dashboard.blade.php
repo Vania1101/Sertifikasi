@@ -254,25 +254,7 @@
                 Skema Sertifikasi
 
             </a>
-
-
-            <div class="menu-title">
-                Akun
-            </div>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <button type="submit"
-                        class="menu-item"
-                        style="width:100%; border:none; background:white; cursor:pointer; text-align:left;">
-
-                    <span class="menu-icon">↪</span>
-                    Logout
-
-                </button>
-            </form>
-
+            
         </aside>
 
 

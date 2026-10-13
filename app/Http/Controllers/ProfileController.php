@@ -26,7 +26,7 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $request->user()->fill($request->validated()); //isi data baru yang lolos validasi
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
@@ -52,9 +52,9 @@ class ProfileController extends Controller
 
         $user->delete();
 
-        $request->session()->invalidate();
+        $request->session()->invalidate(); //menghapus login user
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return Redirect::to('/'); //kembali user ke halaman utama
     }
 }

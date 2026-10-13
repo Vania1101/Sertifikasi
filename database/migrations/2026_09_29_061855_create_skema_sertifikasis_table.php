@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_skema', 50)->unique();
             $table->string('nama_skema');
-            $table->text('deskripsi')->nullable();
+            $table->text('deskripsi')->nullable(); //kolom deskripsi boleh kosong
             $table->timestamps();
         });
     }
