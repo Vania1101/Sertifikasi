@@ -129,11 +129,6 @@
 
     <nav>
         <div class="logo">Sistem Informasi Sertifikasi</div>
-
-        <div>
-            <a href="{{ route('login') }}">Login</a>
-            <a href="{{ route('register') }}">Register</a>
-        </div>
     </nav>
 
     <main class="hero">
